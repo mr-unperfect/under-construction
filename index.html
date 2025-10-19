@@ -85,7 +85,10 @@
         const center = centerOfText();
         // compute orbit radius based on text box size
         const textRect = textEl.getBoundingClientRect();
-        const orbitRadius = Math.max(40, Math.hypot(textRect.width/2, textRect.height/2) + orbitPadding);
+        // responsive orbit radius based on screen size
+        const minSide = Math.min(w, h);
+        const baseRadius = Math.hypot(textRect.width/2, textRect.height/2) + orbitPadding;
+        const orbitRadius = Math.min(baseRadius, minSide/2.5);
 
         if(!reduced){
           // update angle
@@ -148,4 +151,3 @@
   </script>
 </body>
 </html>
-
