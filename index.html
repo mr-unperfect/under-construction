@@ -7,146 +7,115 @@
   <style>
     html,body{height:100%;margin:0}
     body{
-      background:#000; /* full black background */
-      overflow:hidden;ååå‚
-      display:flex;align-items:center;justify-content:center;
+      background:#000;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100vh;
     }
 
-    .wrap{position:relative;display:flex;align-items:center;justify-content:center}
+    .wrap{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
 
     h1{
-      color:#fff;
-      font-family:'Courier New', monospace;
-      font-size:clamp(28px,7vw,64px);
-      text-shadow:0 0 10px rgba(255,255,255,0.5);
-      margin:0;padding:0 32px;z-index:2;position:relative;white-space:nowrap;
-      letter-spacing:2px;font-weight:700;text-transform:uppercase;
+      color:#00f0ff;
+      font-family:'Orbitron', sans-serif;
+      font-size:calc(min(8vw, 8vh));
+      text-shadow:0 0 20px rgba(0,240,255,0.7), 0 0 40px rgba(0,240,255,0.5), 0 0 60px rgba(0,240,255,0.3);
+      margin:0;
+      padding:0 16px;
+      z-index:2;
+      position:relative;
+      white-space:nowrap;
+      letter-spacing:2px;
+      font-weight:700;
+      text-transform:uppercase;
     }
 
-    /* Canvas sits behind the text but above background */
-    canvas#trail{position:fixed;inset:0;z-index:1;pointer-events:none}
+    canvas#trail{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+    }
 
-    /* Small accessibility: reduce motion */
     @media (prefers-reduced-motion: reduce){
       .orbiting-dot{display:none}
     }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
 </head>
-<body style="display:flex;align-items:center;justify-content:center;min-height:100vh;">
-  <div class="wrap" style="position:relative;display:flex;align-items:center;justify-content:center;">>
+<body>
+  <div class="wrap">
     <h1 id="uc">UNDER CONSTRUCTION</h1>
   </div>
-
   <canvas id="trail" aria-hidden="true"></canvas>
-
   <script>
-    // Blue dot orbiting around the text with a light trailing effect
     (function(){
       const canvas = document.getElementById('trail');
       const ctx = canvas.getContext('2d');
-      let w = 0, h = 0, dpr = Math.max(1, window.devicePixelRatio || 1);
+      let w=0,h=0,dpr=Math.max(1,window.devicePixelRatio||1);
 
       function resize(){
-        dpr = Math.max(1, window.devicePixelRatio || 1);
-        w = innerWidth; h = innerHeight;
-        canvas.style.width = w+'px';
-        canvas.style.height = h+'px';
-        canvas.width = Math.floor(w * dpr);
-        canvas.height = Math.floor(h * dpr);
+        dpr = Math.max(1,window.devicePixelRatio||1);
+        w=innerWidth; h=innerHeight;
+        canvas.style.width=w+'px'; canvas.style.height=h+'px';
+        canvas.width=Math.floor(w*dpr); canvas.height=Math.floor(h*dpr);
         ctx.setTransform(dpr,0,0,dpr,0,0);
-        // clear fully on resize
-        ctx.fillStyle = 'rgba(0,0,0,1)';
-        ctx.fillRect(0,0,w,h);
+        ctx.fillStyle='rgba(0,0,0,1)'; ctx.fillRect(0,0,w,h);
       }
-      resize();
-      addEventListener('resize', resize);
+      resize(); window.addEventListener('resize',resize);
 
-      const textEl = document.getElementById('uc');
+      const textEl=document.getElementById('uc');
       function centerOfText(){
-        const r = textEl.getBoundingClientRect();
-        return {x: r.left + r.width/2, y: r.top + r.height/2};
+        const r=textEl.getBoundingClientRect();
+        return {x:r.left+r.width/2,y:r.top+r.height/2};
       }
 
-      // Orbit settings
-      let angle = 0;
-      const speed = 0.015; // radians per frame (adjust for faster/slower)
-      const dotRadius = 7; // px
-      const orbitPadding = 28; // distance from text box edge to orbit path
+      let angle=0,speed=0.015,dotRadius=7,orbitPadding=28;
+      const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      // Respect reduced-motion preference
-      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // draw loop
       function loop(){
-        // draw semi-transparent black to fade previous frames -> trail
-        ctx.fillStyle = 'rgba(0,0,0,0.2)' // faster fade;
+        ctx.fillStyle='rgba(0,0,0,0.25)';
         ctx.fillRect(0,0,w,h);
 
-        const center = centerOfText();
-        // compute orbit radius based on text box size
-        const textRect = textEl.getBoundingClientRect();
-        // responsive orbit radius based on screen size
-        const minSide = Math.min(w, h);
-        const baseRadius = Math.hypot(textRect.width/2, textRect.height/2) + orbitPadding;
-        const orbitRadius = Math.min(baseRadius, minSide/2.5);
+        const center=centerOfText();
+        const textRect=textEl.getBoundingClientRect();
+        const minSide=Math.min(w,h);
+        const baseRadius=Math.hypot(textRect.width/2,textRect.height/2)+orbitPadding;
+        const orbitRadius=Math.min(baseRadius,minSide/2.5);
 
         if(!reduced){
-          // update angle
-          angle += speed;
+          angle+=speed;
+          const x=center.x+Math.cos(angle)*orbitRadius;
+          const y=center.y+Math.sin(angle)*orbitRadius;
 
-          // dot position
-          const x = center.x + Math.cos(angle) * orbitRadius;
-          const y = center.y + Math.sin(angle) * orbitRadius;
+          const grd=ctx.createRadialGradient(x,y,0,x,y,dotRadius*3);
+          grd.addColorStop(0,'rgba(30,144,255,0.95)');
+          grd.addColorStop(0.4,'rgba(30,144,255,0.35)');
+          grd.addColorStop(1,'rgba(30,144,255,0)');
+          ctx.beginPath(); ctx.fillStyle=grd; ctx.arc(x,y,dotRadius*3,0,Math.PI*2); ctx.fill();
 
-          // subtle glow
-          const grd = ctx.createRadialGradient(x,y,0,x,y,dotRadius*3);
-          grd.addColorStop(0, 'rgba(30,144,255,0.95)'); // dodger-like blue
-          grd.addColorStop(0.4, 'rgba(30,144,255,0.35)');
-          grd.addColorStop(1, 'rgba(30,144,255,0)');
+          ctx.beginPath(); ctx.fillStyle='rgba(30,144,255,1)'; ctx.arc(x,y,dotRadius,0,Math.PI*2); ctx.fill();
 
-          ctx.beginPath();
-          ctx.fillStyle = grd;
-          ctx.arc(x,y,dotRadius*3,0,Math.PI*2);
-          ctx.fill();
-
-          // solid dot
-          ctx.beginPath();
-          ctx.fillStyle = 'rgba(30,144,255,1)';
-          ctx.arc(x,y,dotRadius,0,Math.PI*2);
-          ctx.fill();
-
-          // small tail (a short translucent line behind the dot)
-          const tailAngle = angle - 0.25; // behind the dot
-          const tx = center.x + Math.cos(tailAngle) * orbitRadius;
-          const ty = center.y + Math.sin(tailAngle) * orbitRadius;
-          ctx.beginPath();
-          ctx.lineWidth = Math.max(1, dotRadius/2);
-          ctx.strokeStyle = 'rgba(30,144,255,0.35)';
-          ctx.moveTo(tx,ty);
-          ctx.lineTo(x,y);
-          ctx.stroke();
+          const tailAngle=angle-0.25;
+          const tx=center.x+Math.cos(tailAngle)*orbitRadius;
+          const ty=center.y+Math.sin(tailAngle)*orbitRadius;
+          ctx.beginPath(); ctx.lineWidth=Math.max(1,dotRadius/2); ctx.strokeStyle='rgba(30,144,255,0.35)'; ctx.moveTo(tx,ty); ctx.lineTo(x,y); ctx.stroke();
         } else {
-          // reduced motion: draw a static dot at the right-most orbit point
-          const x = center.x + orbitRadius;
-          const y = center.y;
+          const x=center.x+orbitRadius; const y=center.y;
           ctx.beginPath(); ctx.fillStyle='rgba(30,144,255,1)'; ctx.arc(x,y,dotRadius,0,Math.PI*2); ctx.fill();
         }
-
         requestAnimationFrame(loop);
       }
-
-      // initialize background fully black so trail builds cleanly
-      ctx.fillStyle = 'rgba(0,0,0,1)'; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='rgba(0,0,0,1)'; ctx.fillRect(0,0,w,h);
       requestAnimationFrame(loop);
-
-      // Accessibility: pause animation when tab is inactive
-      document.addEventListener('visibilitychange', ()=>{
-        if(document.hidden){
-          // fill fully to avoid stale trails
-          ctx.fillStyle = 'rgba(0,0,0,1)'; ctx.fillRect(0,0,w,h);
-        }
-      });
-
+      document.addEventListener('visibilitychange',()=>{if(document.hidden){ctx.fillStyle='rgba(0,0,0,1)'; ctx.fillRect(0,0,w,h);}});
     })();
   </script>
 </body>
