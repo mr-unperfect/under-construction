@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Mara Vale monogram</title>
+  <defs>
+    <linearGradient id="g" x1="18" y1="18" x2="110" y2="110" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#72d4ba"/>
+      <stop offset="0.58" stop-color="#2f6fed"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="30" fill="#070a0f"/>
+  <path d="M28 91V37h14l22 31 22-31h14v54H84V63L68 86h-8L44 63v28H28Z" fill="url(#g)"/>
+  <path d="M31 96h66" stroke="#f4efe7" stroke-width="6" stroke-linecap="round" opacity=".82"/>
+</svg>
