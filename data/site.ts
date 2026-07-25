@@ -31,8 +31,16 @@ export type ImageAsset = {
   replacementNote: string;
 };
 
+export const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+export function assetPath(path: `/${string}`) {
+  return `${basePath}${path}`;
+}
+
+const siteUrl = "https://mr-unperfect.github.io/under-construction";
+
 export const site = {
-  url: "https://mr-unperfect.github.io/under-construction",
+  url: siteUrl,
   name: "Mara Vale",
   shortName: "Mara",
   monogram: "MV",
@@ -49,9 +57,9 @@ export const site = {
   copyrightOwner: "Mara Vale Studio",
   legalCity: "Berlin, Germany",
   legalName: "Mara Vale Studio",
-  logo: "/assets/brand-mark.svg",
-  favicon: "/assets/favicon.svg",
-  ogImage: "/assets/og-image.webp",
+  logo: assetPath("/assets/brand-mark.svg"),
+  favicon: assetPath("/assets/favicon.svg"),
+  ogImage: `${siteUrl}/assets/og-image.webp`,
 } as const;
 
 export const seo = {
@@ -72,25 +80,25 @@ export const seo = {
 
 export const images = {
   portrait: {
-    src: "/assets/creator-portrait.webp",
+    src: assetPath("/assets/creator-portrait.webp"),
     alt: "Fictional creator Mara Vale in a calm modern technology studio.",
     replacementNote:
       "Replace with a real creator portrait, ideally 4:5 vertical, minimum 960 by 1200 pixels.",
   },
   studio: {
-    src: "/assets/studio-workspace.webp",
+    src: assetPath("/assets/studio-workspace.webp"),
     alt: "A calm technology workspace with a laptop, notebook, and privacy-focused desk setup.",
     replacementNote:
       "Replace with an editorial desk or studio image, landscape crop, minimum 1600 by 1000 pixels.",
   },
   abstract: {
-    src: "/assets/privacy-abstract.webp",
+    src: assetPath("/assets/privacy-abstract.webp"),
     alt: "Abstract privacy and data ownership visual with subtle interface layers.",
     replacementNote:
       "Replace with a brand abstract, article cover, or campaign visual, landscape crop.",
   },
   projectCollage: {
-    src: "/assets/project-collage.webp",
+    src: assetPath("/assets/project-collage.webp"),
     alt: "Editorial mockup collage of privacy guides, dashboards, and automation workflows.",
     replacementNote:
       "Replace with project screenshots or product mockups, landscape crop.",
@@ -181,7 +189,7 @@ export const featuredContent = [
     date: "2026-07-18",
     platform: "YouTube",
     href: "https://youtube.com/@maravale",
-    image: "/assets/privacy-guide.webp",
+    image: assetPath("/assets/privacy-guide.webp"),
   },
   {
     title: "Password Managers Are Not the Hard Part",
@@ -191,7 +199,7 @@ export const featuredContent = [
     date: "2026-07-09",
     platform: "Newsletter",
     href: "#newsletter",
-    image: "/assets/privacy-abstract.webp",
+    image: assetPath("/assets/privacy-abstract.webp"),
   },
   {
     title: "A Private Home Dashboard That Does Less",
@@ -201,7 +209,7 @@ export const featuredContent = [
     date: "2026-06-27",
     platform: "GitHub",
     href: "#projects",
-    image: "/assets/home-lab.webp",
+    image: assetPath("/assets/home-lab.webp"),
   },
   {
     title: "AI Notes Without Handing Over Your Whole Brain",
@@ -211,7 +219,7 @@ export const featuredContent = [
     date: "2026-06-12",
     platform: "Website",
     href: "#content",
-    image: "/assets/automation-workflows.webp",
+    image: assetPath("/assets/automation-workflows.webp"),
   },
 ] as const;
 
@@ -265,7 +273,7 @@ export const projects = [
     title: "Private Life Starter Kit",
     description:
       "A step-by-step guide for upgrading passwords, backups, browser settings, device permissions, and recovery plans.",
-    image: "/assets/privacy-guide.webp",
+    image: assetPath("/assets/privacy-guide.webp"),
     technologies: ["Markdown", "Checklist Design", "Threat Modeling"],
     status: "Public draft",
     github: "https://github.com/maravale/private-life-starter-kit",
@@ -275,7 +283,7 @@ export const projects = [
     title: "Home Signal Dashboard",
     description:
       "A quiet local dashboard for Wi-Fi health, uptime, speed checks, and household network visibility.",
-    image: "/assets/home-lab.webp",
+    image: assetPath("/assets/home-lab.webp"),
     technologies: ["Linux", "FastAPI", "SQLite", "Raspberry Pi"],
     status: "Prototype",
     github: "https://github.com/maravale/home-signal-dashboard",
@@ -285,7 +293,7 @@ export const projects = [
     title: "Indie Workflow Recipes",
     description:
       "Small automation templates for publishing, archiving, note capture, invoice prep, and privacy-friendly backups.",
-    image: "/assets/automation-workflows.webp",
+    image: assetPath("/assets/automation-workflows.webp"),
     technologies: ["n8n", "Shell", "Local-first tools", "Open APIs"],
     status: "In progress",
     github: "https://github.com/maravale/indie-workflow-recipes",

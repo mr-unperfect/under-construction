@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Rss } from "lucide-react";
-import { site, socials } from "@/data/site";
+import { assetPath, site, socials } from "@/data/site";
 import { ThemeToggle } from "./theme-toggle";
 
 export function Footer() {
@@ -38,7 +38,7 @@ export function Footer() {
           <a
             aria-label="RSS feed"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--line)] text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--accent-strong)]"
-            href="/rss.xml"
+            href={assetPath("/rss.xml")}
           >
             <Rss size={18} />
           </a>
